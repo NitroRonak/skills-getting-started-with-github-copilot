@@ -57,7 +57,23 @@ document.addEventListener('DOMContentLoaded', () => {
           const li = document.createElement('li');
           li.className = 'participant-item';
           li.dataset.initials = initialsFor(email);
-          li.textContent = email;
+          li.dataset.email = email;
+          li.dataset.activity = name;
+          
+          const emailSpan = document.createElement('span');
+          emailSpan.textContent = email;
+          li.appendChild(emailSpan);
+          
+          const deleteBtn = document.createElement('button');
+          deleteBtn.className = 'delete-participant';
+          deleteBtn.textContent = '\u2715';
+          deleteBtn.type = 'button';
+          deleteBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            removeParticipant(name, email);
+          });
+          li.appendChild(deleteBtn);
+          
           participantsList.appendChild(li);
         });
       } else {
@@ -129,6 +145,24 @@ document.addEventListener('DOMContentLoaded', () => {
       showMessage(err.message || 'Unable to sign up. Try again.', 'error');
     }
   });
+
+  async function removeParticipant(activityName, email) {
+    hideMessage();
+    try {
+      const url = `/activities/${encodeURIComponent(activityName)}/unregister?email=${encodeURIComponent(email)}`;
+      const res = await fetch(url, { method: 'POST' });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.detail || data.message || 'Unregister failed');
+      }
+      showMessage(data.message || `Unregistered ${email} from ${activityName}`, 'success');
+      
+      // Refresh the local activities and UI
+      await refreshActivities();
+    } catch (err) {
+      showMessage(err.message || 'Unable to unregister. Try again.', 'error');
+    }
+  }
 
   // Initial load
   refreshActivities();

@@ -153,8 +153,8 @@ footer {
 /* Participants list */
 .participants {
   margin: 6px 0 0;
-  padding-left: 22px;
-  list-style: disc;
+  padding-left: 0;
+  list-style: none;
   max-height: 160px;        /* keep long lists contained */
   overflow-y: auto;
 }
@@ -191,6 +191,25 @@ footer {
   font-weight: 700;
   font-size: 12px;
   flex: 0 0 auto;
+}
+
+/* Delete button for participant */
+.delete-participant {
+  margin-left: auto;
+  background-color: transparent;
+  color: #c62828;
+  border: none;
+  padding: 4px 8px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s, color 0.2s;
+  flex: 0 0 auto;
+}
+
+.delete-participant:hover {
+  background-color: #ffebee;
+  color: #b71c1c;
 }
 
 /* Style for "no participants yet" */
